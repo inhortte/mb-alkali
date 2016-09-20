@@ -1,0 +1,11 @@
+thurk/node_modules/**
+thurk/dump.rdb
+thurk/etc/**
+.git/**
+.gitignore
+docker-compose.yml
+thurk/server/**
+redis-data/**
+thurk/public/js/**
+thurk/public/css/**
+*~

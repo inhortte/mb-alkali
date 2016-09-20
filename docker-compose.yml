@@ -1,0 +1,20 @@
+version: '2'
+services:
+  martenblog:
+    image: martenblog
+    container_name: martenblog
+    depends_on:
+      - redis
+    volumes:
+      - ./thurk:/opt/app
+    ports:
+      - "3033:3033"
+    depends_on:
+      - minkmongo
+  minkmongo:
+    image: minkmongo
+    container_name: minkmongo
+    volumes:
+      - /var/lib/mongodb:/data/db
+    ports:
+      - "27017:27017"

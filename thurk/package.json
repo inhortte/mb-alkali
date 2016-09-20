@@ -1,0 +1,11 @@
+{
+  "name": "martenblog",
+  "version": "1.0.0",
+  "description": "Martenblog using Alkali",
+  "main": "server/mb.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bobbus Mustelidus",
+  "license": "ISC"
+}
