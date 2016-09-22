@@ -1,3 +1,5 @@
+'use strict';
+
 require('babel-core/register');
 
 const gulp = require('gulp');
@@ -21,6 +23,8 @@ const paths = {
   cssDest: 'public/css'
 };
 const babelPlugins = [
+  //  'transform-alkali',
+  'transform-regenerator',
   'transform-object-assign',
   'array-includes'
 ];
@@ -40,8 +44,8 @@ const babelify= () => {
   return gulp.src(paths.clientSrc)
     .pipe(sourcemaps.init())
     .pipe(babel({
-      presets: ['react-es2015'],
-      plugins: ['transform-object-assign', 'array-includes']
+      presets: ['es2015'],
+      plugins: babelPlugins
     }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.clientDest));
@@ -50,7 +54,7 @@ const css = () => {
   return gulp.src(paths.cssSrc).pipe(gulp.dest(paths.cssDest));
 };
 const browserify2 = () => {
-  return gulp.src(path.join(paths.clientDest, 'js/hamstern.js'))
+  return gulp.src(path.join(paths.clientDest, 'js/mb.js'))
     .pipe(browserify({
       "browserify-css": {
         autoInject: true
@@ -79,8 +83,7 @@ const cleanServer = (cb) => {
 const server = () => {
   return gulp.src(paths.serverSrc)
     .pipe(babel({
-      presets: ['react-es2015'],
-      plugins: ['transform-object-assign', 'array-includes']
+      plugins: babelPlugins
     }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.serverDest));
