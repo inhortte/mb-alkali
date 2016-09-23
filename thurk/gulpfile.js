@@ -23,7 +23,7 @@ const paths = {
   cssDest: 'public/css'
 };
 const babelPlugins = [
-  //  'transform-alkali',
+  // 'transform-alkali',
   'transform-regenerator',
   'transform-object-assign',
   'array-includes'
@@ -34,7 +34,8 @@ const babelPlugins = [
  */
 
 const cleanClient = (cb) => {
-  del([path.join(paths.clientDest, '**/*.js'), path.join(paths.cssDest, '**/*.css')]).then(function(ps) {
+  del([path.join(paths.clientDest, '**/*.js'), path.join(paths.cssDest, '**/*.css'),
+       '!' + path.join(paths.clientDest, 'vendor/**')]).then(ps => {
     console.log('Expunged:\n' + ps.join('\n'));
     cb();
   });
@@ -54,7 +55,7 @@ const css = () => {
   return gulp.src(paths.cssSrc).pipe(gulp.dest(paths.cssDest));
 };
 const browserify2 = () => {
-  return gulp.src(path.join(paths.clientDest, 'js/mb.js'))
+  return gulp.src(path.join(paths.clientDest, 'js/mbClient.js'))
     .pipe(browserify({
       "browserify-css": {
         autoInject: true
