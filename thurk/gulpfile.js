@@ -22,8 +22,10 @@ const paths = {
   cssSrc: 'src/client/**/*.css',
   cssDest: 'public/css'
 };
+const babelPresets = [
+  'react-es2015'
+];
 const babelPlugins = [
-  // 'transform-alkali',
   'transform-regenerator',
   'transform-object-assign',
   'array-includes'
@@ -45,7 +47,7 @@ const babelify= () => {
   return gulp.src(paths.clientSrc)
     .pipe(sourcemaps.init())
     .pipe(babel({
-      presets: ['es2015'],
+      presets: babelPresets,
       plugins: babelPlugins
     }))
     .pipe(sourcemaps.write('.'))

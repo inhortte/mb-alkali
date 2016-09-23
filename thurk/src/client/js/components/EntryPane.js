@@ -1,10 +1,8 @@
 'use strict';
 
-import 'babel-polyfill';
 import R from 'ramda';
-import { react, Div, Button, Nav, UL, LI, Anchor, Item, Span, P } from 'alkali';
+import React from 'react';
 import { sbToggle } from '../external/sidebar';
-import { pages, pagesTrunc, currentPage } from '../variables';
 
 const PageLis = (pages, currentPage) => {
   let mapIndexed = R.addIndex(R.map);
@@ -28,6 +26,7 @@ const PageLis = (pages, currentPage) => {
   return prev.concat(middle).concat(next);
 };
 
+/*
 class HeadWithinTheThorax extends Div('.col-md-12', [
   Div('.col-md-10', [
     Nav('', [
@@ -45,11 +44,6 @@ class HeadWithinTheThorax extends Div('.col-md-12', [
 	})
       })
     ])
-    /*
-    Nav('', [
-      UL('.pagination', PageLis(Pages, CurrentPage))
-    ])
-    */
   ]),
   Button('.col-md-1.col-md-push-1.btn.btn-info', {
     content: 'Topics',
@@ -59,9 +53,41 @@ class HeadWithinTheThorax extends Div('.col-md-12', [
     }
   })
 ]) { }
+*/
 
-class EntryPane extends Div('', [
-  HeadWithinTheThorax
-]) { }
+const HeadWithinTheThorax = ({ pages, currentPage, hasPrevPageLink, hasNextPageLink, changePage, sbToggle }) => {
+  let prevPageThurk = hasPrevPageLink ?
+      <li><a href="#" aria-label="Previous" onClick={() => changePage(currentPage - 1)}><span aria-hidden="true">&laquo;</span></a></li> :
+      '';
+  let pageThurks = R.map(p => {
+    let liClass = p.selected ? 'active' : '';
+    return <li className={liClass} key={p.pNum}><a href="#" onClick={() => changePage(p.pNum)}>{p.pNum}</a></li>;
+  }, pages);
+  let nextPageThurk = hasNextPageLink ?
+      <li><a href="#" aria-label="Next" onClick={() => changePage(currentPage + 1)}><span aria-hidden="true">&raquo;</span></a></li> :
+      '';
+  return (
+    <div className="col-md-12">
+      <div className="col-md-10">
+	<nav>
+	  <ul className="pagination">
+	    {prevPageThurk}
+	    {pageThurks}
+	    {nextPageThurk}
+	  </ul>
+	</nav>
+      </div>
+      <button className="col-md-1 col-md-push-1 btn btn-info" onClick={sbToggle}>
+	Topics
+      </button>
+    </div>
+  );
+};
+
+const EntryPane = ({ pages, currentPage, hasPrevPageLink, hasNextPageLink, changePage, sbToggle }) => {
+  return (
+    <HeadWithinTheThorax pages={pages} currentPage={currentPage} hasPrevPageLink={hasPrevPageLink} hasNextPageLink={hasNextPageLink} changePage={changePage} sbToggle={sbToggle} />
+  );
+};
 
 export default EntryPane;

@@ -1,5 +1,7 @@
 {
-  "presets": ["es2015"],
-  "plugins": ["transform-regenerator"]
+  "presets": ["react-es2015"],
+  "plugins": ["transform-regenerator",
+	      "transform-object-assign",
+	      "array-includes"]
 }
 
