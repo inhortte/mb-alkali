@@ -27,11 +27,23 @@ const filterTopics = (fText, topics) => {
   return (R.trim(fText).length === 0 && topics) || R.filter(t => re.test(t.topic), topics);
 };
 
+const addTopic = (topic, _curTopics) => {
+  let curTopics = R.clone(_curTopics);
+  curTopics[topic.topic] = topic;
+  console.log(`curTopics: ${JSON.stringify(curTopics)}`);
+  return curTopics;
+};
+const removeTopic = (topic, _curTopics) => {
+  let curTopics = R.clone(_curTopics);
+  delete curTopics[topic.topic];
+  return curTopics;
+};
+
 const initialState = {
   pages: mkPages(15),
   topics: [],
   filteredTopics: [],
-  curTopics: []
+  curTopics: {}
 };
 
 export const mbApp = (state = initialState, action) => {
@@ -44,6 +56,10 @@ export const mbApp = (state = initialState, action) => {
     return Object.assign({}, state, { topics: action.topics });
   case 'TOPIC_FILTER_CHANGE':
     return Object.assign({}, state, { filteredTopics: filterTopics(action.fText, state.topics) });
+  case 'ADD_TOPIC':
+    return Object.assign({}, state, { curTopics: addTopic(action.topic, state.curTopics) });
+  case 'REMOVE_TOPIC':
+    return Object.assign({}, state, { curTopics: removeTopic(action.topic, state.curTopics) });
   default:
     return state;
   };

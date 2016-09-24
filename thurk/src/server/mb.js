@@ -72,7 +72,8 @@ server.register(Nes, err => {
 	reply({ topics: R.map(t => {
 	  return {
 	    id: t._id,
-	    topic: t.topic
+	    topic: t.topic,
+	    count: t.entry_ids.length
 	  };
 	}, topics)});
       });

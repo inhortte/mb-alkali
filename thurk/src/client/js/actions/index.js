@@ -15,6 +15,12 @@ export const setTopics = topics => {
 export const tfChange = fText => {
   return { type: 'TOPIC_FILTER_CHANGE', fText };
 };
+export const addTopic = topic => {
+  return { type: 'ADD_TOPIC', topic };
+};
+export const removeTopic = topic => {
+  return { type: 'REMOVE_TOPIC', topic };
+};
 
 /*
  * THUNKS
