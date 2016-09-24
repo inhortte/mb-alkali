@@ -32,5 +32,7 @@ export const analPageNumbers = (pagesArr) => {
 };
 
 export const currentPage = (pagesArr) => {
-  return R.find(R.propEq('selected', true))(pagesArr)['pNum'];
+  // console.log(`currentPage - pagesArr: ${JSON.stringify(pagesArr)}`);
+  let page = R.find(R.propEq('selected', true))(pagesArr);
+  return (page && page.pNum) || 1;
 };

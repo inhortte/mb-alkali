@@ -12,19 +12,38 @@ const selectPage = (pNum, pages) => {
   }, pages);
 };
 
-const initialState = {
-  pages: R.map(p => {
+const mkPages = pageCount => {
+  return R.map(p => {
     return {
       pNum: p,
       selected: p === 1
     };
-  }, R.range(1, 15))
+  }, R.range(1, pageCount));
+};
+
+const filterTopics = (fText, topics) => {
+  console.log(`there are ${topics.length} topics`);
+  let re = new RegExp(fText.trim(), 'i');
+  return (R.trim(fText).length === 0 && topics) || R.filter(t => re.test(t.topic), topics);
+};
+
+const initialState = {
+  pages: mkPages(15),
+  topics: [],
+  filteredTopics: [],
+  curTopics: []
 };
 
 export const mbApp = (state = initialState, action) => {
   switch(action.type) {
   case 'CHANGE_PAGE':
     return Object.assign({}, state, { pages: selectPage(action.pNum, state.pages) });
+  case 'SET_PAGES':
+    return Object.assign({}, state, { pages: mkPages(action.pageCount) });
+  case 'SET_TOPICS':
+    return Object.assign({}, state, { topics: action.topics });
+  case 'TOPIC_FILTER_CHANGE':
+    return Object.assign({}, state, { filteredTopics: filterTopics(action.fText, state.topics) });
   default:
     return state;
   };

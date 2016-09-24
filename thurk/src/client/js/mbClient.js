@@ -5,10 +5,11 @@ import thunk from 'redux-thunk';
 import { render } from 'react-dom';
 import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import TopicPane from './components/TopicPane';
+import VTopicPane from './containers/VTopicPane';
 import VEntryPane from './containers/VEntryPane';
 import { sbInit } from './external/sidebar';
 import { mbApp } from './reducers';
+import { fetchPageCount, fetchTopics } from './actions';
 
 const bodyColors = [
   '#8b8b83', '#696969', '#cd5c5c', '#8fbc8f', '#66cdaa', '#008b8b', '#483d8b', '#cd5555', '#838b83', '#6e7b8b', '#8b7b8b'
@@ -46,6 +47,8 @@ class Martenblog extends React.Component {
   componentDidMount() {
     document.body.style.background = bodyColors[Math.floor(Math.random() * bodyColors.length)];
     sbInit();
+    this.props.dispatch(fetchPageCount());
+    this.props.dispatch(fetchTopics(true));
   }
   render() {
     return(
@@ -58,18 +61,21 @@ class Martenblog extends React.Component {
 	  </div>
 	</div>
 	<div id="martenblog-sidebar" className="sidebar sidebar-right sidebar-visible-md-up sidebar-size-20c sidebar-dark bg-primary" data-scrollable data-position="right">
-	  <TopicPane />
+	  <VTopicPane />
 	</div>
       </div>
     );
   };
 }
+const VMartenblog = connect(
+  
+)(Martenblog);
 
 const store = createStore(mbApp, applyMiddleware(thunk));
 
 render(
   <Provider store={store}>
-    <Martenblog />
+    <VMartenblog />
   </Provider>,
   document.getElementById('martenblog')
 );

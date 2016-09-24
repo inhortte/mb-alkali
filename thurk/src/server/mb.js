@@ -1,5 +1,6 @@
 'use strict';
 
+import R from 'ramda';
 import path from 'path';
 import Hapi from 'hapi';
 import Nes from 'nes';
@@ -68,7 +69,12 @@ server.register(Nes, err => {
     path: '/topics',
     handler: (req, reply) => {
       getTopics().then(topics => {
-	reply({ topic: topics[0] });
+	reply({ topics: R.map(t => {
+	  return {
+	    id: t._id,
+	    topic: t.topic
+	  };
+	}, topics)});
       });
     }
   });
