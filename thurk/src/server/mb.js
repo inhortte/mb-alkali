@@ -85,7 +85,7 @@ server.register(Nes, err => {
     handler: (req, reply) => {
       let { y, m, d } = req.params;
       getEntriesByDate(req.params).then(entries => {
-	reply({ count: entries.length, entry: entries[0] });
+	reply({ entries: entries });
       });
     }
   });

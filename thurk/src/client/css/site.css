@@ -1,5 +1,6 @@
-body {
+body, html {
     font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+    overflow: visible;
 }
 
 #martenblog-sidebar {

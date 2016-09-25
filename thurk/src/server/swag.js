@@ -71,7 +71,9 @@ export const getEntriesByDate = ({ y, m, d }) => new Promise((resolve) => {
   mongoConnect().then(_db => {
     db = _db;
     let coll = db.collection('entry');
-    return coll.find({ $and: [{ created_at: { $gte: beginTime }}, { created_at: { $lte: endTime }}]}).toArray();
+    return coll.find({ $and: [{ created_at: { $gte: beginTime }}, { created_at: { $lte: endTime }}]})
+      .sort({ created_at: -1 })
+      .toArray();
   }).then(entries => {
     db.close(true);
     resolve(entries.reverse());

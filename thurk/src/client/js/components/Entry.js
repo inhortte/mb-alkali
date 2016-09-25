@@ -50,12 +50,14 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
     hour: '2-digit',
     minute: '2-digit'
   };
-  let date = new Intl.DateTimeFormat('en-GB', dateOpts).format(new Date(entry.created_at));
+  let _date = new Date(entry.created_at);
+  let dateLink = `#/${_date.getFullYear()}/${_date.getMonth() + 1}/${_date.getDate()}`;
+  let date = new Intl.DateTimeFormat('en-GB', dateOpts).format(_date);
   return (
     <div className="col-md-8 col-md-push-2 entry" style={entryStyle}>
       <div className="row">
 	<div className="col-md-12" style={subjectStyle}>
-	  {entry.subject}
+	  <a href={dateLink}>{entry.subject}</a>
 	</div>
       </div>
       <div className="row">
@@ -65,7 +67,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
 	<div className="col-md-4">
 	  <div style={dateStyle}>{date}</div>
 	  <div style={expandCollapseStyle}>
-	    <a href="#" onClick={() => toggleExpand(entry._id)}>
+	    <a href="#" onClick={e => { e.preventDefault(); toggleExpand(entry._id);}}>
 	      {expanded ? 'contract' : 'expand'}
 	    </a>
 	  </div>

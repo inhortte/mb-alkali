@@ -3,6 +3,7 @@
 import R from 'ramda';
 import React from 'react';
 import VEntries from '../containers/VEntries';
+import VDateEntry from '../containers/VDateEntry';
 
 const PageLis = (pages, currentPage) => {
   let mapIndexed = R.addIndex(R.map);
@@ -52,12 +53,14 @@ const HeadWithinTheThorax = ({ pages, currentPage, hasPrevPageLink, hasNextPageL
   );
 };
 
-const EntryPane = ({ pages, currentPage, hasPrevPageLink, hasNextPageLink, changePage, sbToggle }) => {
+const EntryPane = ({ pages, currentPage, hasPrevPageLink, hasNextPageLink, y, m, d, changePage, sbToggle }) => {
   let style = { overflow: 'scroll' };
+  console.log(`EntryPane y: ${y}`);
+  let entries = (y && m && d) ? <VDateEntry y={y} m={m} d={d} /> : <VEntries />;
   return (
     <div>
       <HeadWithinTheThorax pages={pages} currentPage={currentPage} hasPrevPageLink={hasPrevPageLink} hasNextPageLink={hasNextPageLink} changePage={changePage} sbToggle={sbToggle} />
-      <VEntries />
+      {entries}
     </div>
   );
 };

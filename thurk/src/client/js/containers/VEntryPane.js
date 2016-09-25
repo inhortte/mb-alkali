@@ -6,14 +6,18 @@ import { maxPageNumbersToDisplay } from '../config';
 import { changePage } from '../actions';
 import { sbToggle } from '../external/sidebar';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   let pages = analPageNumbers(state.pages);
   let cp = currentPage(state.pages);
+  let { y, m, d } = ownProps;
   return {
     pages: pages,
     currentPage: cp,
     hasPrevPageLink: cp > 1,
-    hasNextPageLink: cp < state.pages.length
+    hasNextPageLink: cp < state.pages.length,
+    y: y,
+    m: m,
+    d: d
   };
 };
 

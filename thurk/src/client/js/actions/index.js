@@ -121,3 +121,14 @@ export const fetchEntries = () => (dispatch, getState) => {
     throw err;
   });
 };
+
+export const fetchDateEntry = (y, m, d) => (dispatch, getState) => {
+  fetchUm(`entry/${y}/${m}/${d}`).then(res => {
+    return res.json()
+  }).then(json => {
+    dispatch(setEntries(json.entries));
+  }).catch(err => {
+    console.log(`fetch date entry err: ${err}`);
+    throw err;
+  });
+};

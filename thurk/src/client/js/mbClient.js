@@ -54,11 +54,22 @@ const VHead = connect(
   }
 )(Head);
 
-const Thorax = () => (
-  <div className="col-md-12">
-    <VEntryPane />
-  </div>
-);
+const Thorax = ({ y, m, d }) => {
+  return (
+    <div className="col-md-12">
+      <VEntryPane y={y} m={m} d={d} />
+    </div>
+  );
+};
+const VThorax = connect(
+  (_, ownProps) => {
+    return {
+      y: ownProps.y,
+      m: ownProps.m,
+      d: ownProps.d
+    };
+  }
+)(Thorax);
 
 const Abdomen = () => (
   <div className="col-md-12">
@@ -88,7 +99,7 @@ class Martenblog extends React.Component {
 	<div id="martenblog-content" className="layout-content">
 	  <div className="container-fluid">
 	    <VHead />
-	    <Thorax />
+	    <VThorax y={y} m={m} d={d}/>
 	    <Abdomen />
 	  </div>
 	</div>
