@@ -16,7 +16,7 @@ const mkPages = pageCount => {
   return R.map(p => {
     return {
       pNum: p,
-      selected: p === 1
+      selected: false
     };
   }, R.range(1, pageCount));
 };
@@ -51,6 +51,7 @@ const toggleExpand = (entryId, expandedEntryIds) => {
 };
 
 const initialState = {
+  sbOpen: false,
   pages: mkPages(15),
   entries: [],
   expandedEntryIds: [],
@@ -62,7 +63,8 @@ const initialState = {
 
 export const mbApp = (state = initialState, action) => {
   switch(action.type) {
-  case 'CHANGE_PAGE':
+  case 'SELECT_PAGE':
+    console.log(`reducer - select page: ${JSON.stringify(action)}`);
     return Object.assign({}, state, { pages: selectPage(action.pNum, state.pages) });
   case 'SET_PAGES':
     return Object.assign({}, state, { pages: mkPages(action.pageCount) });
@@ -80,6 +82,8 @@ export const mbApp = (state = initialState, action) => {
     return Object.assign({}, state, { curTopics: removeTopic(action.topic, state.curTopics) });
   case 'TOGGLE_EXPAND':
     return Object.assign({}, state, { expandedEntryIds: toggleExpand(action.entryId, state.expandedEntryIds) });
+  case 'TOGGLE_SIDEBAR':
+    return Object.assign({}, state, { sbOpen: !state.sbOpen });
   default:
     return state;
   };

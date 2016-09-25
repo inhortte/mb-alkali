@@ -5,8 +5,8 @@ import React from 'react';
 
 const CurTopics = ({ curTopics, removeTopic }) => {
   let ulStyle = { marginBottom: 5 };
-  let liStyle = { border: 0, paddingLeft: 2, paddingRight: 2, paddingTop: 0, paddingBottom: 0, backgroundColor: '#777777', color: '#dddddd' };
-  let aStyle = { margin: 0, padding: 0, paddingLeft: 2, paddingRight: 2, color: '#dddddd' };
+  let liStyle = { border: 0, paddingLeft: 2, paddingRight: 2, paddingTop: 0, paddingBottom: 0, backgroundColor: '#b0c4de', color: '#1e9090' };
+  let aStyle = { margin: 0, padding: 0, paddingLeft: 2, paddingRight: 2, color: '#1e9090' };
   let keys = R.keys(curTopics);
   console.log(`keys: ${JSON.stringify(keys)}`);
   let curTopicsView = '';

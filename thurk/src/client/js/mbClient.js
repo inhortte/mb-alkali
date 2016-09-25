@@ -9,16 +9,16 @@ import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import VTopicPane from './containers/VTopicPane';
 import VEntryPane from './containers/VEntryPane';
-import { sbInit } from './external/sidebar';
 import { mbApp } from './reducers';
-import { fetchPageCount, fetchTopics, fetchEntries } from './actions';
-import { sbToggle } from './external/sidebar';
+import { toggleSidebar, fetchPageCount, fetchTopics, fetchEntries } from './actions';
+import { sbInit, sbHide, sbToggle, setScrollable } from './external/sidebar';
+import { entriesId, sidebarId } from './config';
 
 const bodyColors = [
   '#8b8b83', '#696969', '#cd5c5c', '#8fbc8f', '#66cdaa', '#008b8b', '#483d8b', '#cd5555', '#838b83', '#6e7b8b', '#8b7b8b'
 ];
 
-const Head = () => {
+const Head = ({ sbOpen, openSidebar }) => {
   let mStyles = {
     background: 'center/100% url("images/gretel.jpg")',
     color: '#cccccc',
@@ -29,16 +29,30 @@ const Head = () => {
     top: 5,
     right: 5
   };
+  let button = sbOpen ? '' : <button style={aStyles} className="btn btn-default btn-md" aria-label="Topics" onClick={openSidebar}><span className="glyphicon glyphicon-flash" aria-hidden="true"></span></button>;
   return (
     <div className="col-md-12 jumbotron" style={mStyles}>
       <h1>Martenblog</h1>
       <p>Here lies the Marten, eternally beneath the splintered earth.</p>
-      <button style={aStyles} className="btn btn-default btn-md" aria-label="Topics" onClick={sbToggle}>
-	<span className="glyphicon glyphicon-flash" aria-hidden="true"></span>
-      </button>
+      {button}
     </div>
   );
 };
+const VHead = connect(
+  state => {
+    return {
+      sbOpen: state.sbOpen
+    };
+  },
+  dispatch => {
+    return {
+      openSidebar: () => {
+	sbToggle();
+	dispatch(toggleSidebar());
+      }
+    };
+  }
+)(Head);
 
 const Thorax = () => (
   <div className="col-md-12">
@@ -59,23 +73,26 @@ class Martenblog extends React.Component {
   componentDidMount() {
     document.body.style.background = bodyColors[Math.floor(Math.random() * bodyColors.length)];
     sbInit();
-    this.props.dispatch(fetchPageCount());
+    let page = this.props.page || 1;
+    this.props.dispatch(fetchPageCount(parseInt(page)));
     this.props.dispatch(fetchTopics(true));
-    this.props.dispatch(fetchEntries());
+    setTimeout(() => {
+      sbHide();
+    }, 500);
   }
   render() {
     let { page, y, m, d } = this.props;
-    console.log(`page: ${page} y: ${y} m: ${m} d: ${d}`);
+    let sidebarStyle = { overflow: 'hidden' };
     return(
-      <div id="martenblog-layout-container" className="layout-container ls-top">
+      <div id="martenblog-layout-container" className="layout-container">
 	<div id="martenblog-content" className="layout-content">
 	  <div className="container-fluid">
-	    <Head />
+	    <VHead />
 	    <Thorax />
 	    <Abdomen />
 	  </div>
 	</div>
-	<div id="martenblog-sidebar" className="sidebar sidebar-right sidebar-visible-md-up sidebar-size-20c sidebar-dark bg-primary" data-scrollable data-position="right">
+	<div id="martenblog-sidebar" className="sidebar sidebar-right sidebar-visible-md-up sidebar-size-20c" data-position="right" style={sidebarStyle}>
 	  <VTopicPane />
 	</div>
       </div>
@@ -86,6 +103,12 @@ const VMartenblog = connect(
   (_, ownProps) => {
     let { page, y, m, d } = ownProps.params;
     return { page, y, m, d };
+  },
+  (dispatch, ownProps) => {
+    let { page, y, m, d } = ownProps.params;
+    return {
+      dispatch: dispatch
+    };
   }
 )(Martenblog);
 

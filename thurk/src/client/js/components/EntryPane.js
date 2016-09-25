@@ -28,14 +28,14 @@ const PageLis = (pages, currentPage) => {
 
 const HeadWithinTheThorax = ({ pages, currentPage, hasPrevPageLink, hasNextPageLink, changePage, sbToggle }) => {
   let prevPageThurk = hasPrevPageLink ?
-      <li><a href="#" aria-label="Previous" onClick={() => changePage(currentPage - 1)}><span aria-hidden="true">&laquo;</span></a></li> :
+      <li><a href={`#/${currentPage - 1}`} aria-label="Previous" onClick={() => changePage(currentPage - 1)}><span aria-hidden="true">&laquo;</span></a></li> :
       '';
   let pageThurks = R.map(p => {
     let liClass = p.selected ? 'active' : '';
-    return <li className={liClass} key={p.pNum}><a href="#" onClick={() => changePage(p.pNum)}>{p.pNum}</a></li>;
+    return <li className={liClass} key={p.pNum}><a href={`#/${p.pNum}`} onClick={() => changePage(p.pNum)}>{p.pNum}</a></li>;
   }, pages);
   let nextPageThurk = hasNextPageLink ?
-      <li><a href="#" aria-label="Next" onClick={() => changePage(currentPage + 1)}><span aria-hidden="true">&raquo;</span></a></li> :
+      <li><a href={`#/${currentPage + 1}`} aria-label="Next" onClick={() => changePage(currentPage + 2)}><span aria-hidden="true">&raquo;</span></a></li> :
       '';
   return (
     <div className="col-md-12">
@@ -53,8 +53,9 @@ const HeadWithinTheThorax = ({ pages, currentPage, hasPrevPageLink, hasNextPageL
 };
 
 const EntryPane = ({ pages, currentPage, hasPrevPageLink, hasNextPageLink, changePage, sbToggle }) => {
+  let style = { overflow: 'scroll' };
   return (
-    <div className="col-md-12">
+    <div>
       <HeadWithinTheThorax pages={pages} currentPage={currentPage} hasPrevPageLink={hasPrevPageLink} hasNextPageLink={hasNextPageLink} changePage={changePage} sbToggle={sbToggle} />
       <VEntries />
     </div>

@@ -4,8 +4,8 @@ import R from 'ramda';
 import { contentServer, entriesPerPage } from '../config';
 import { currentPage } from '../utils';
 
-export const changePage = pNum => {
-  return { type: 'CHANGE_PAGE', pNum };
+export const selectPage = pNum => {
+  return { type: 'SELECT_PAGE', pNum };
 };
 export const setPages = pageCount => {
   return { type: 'SET_PAGES', pageCount };
@@ -31,6 +31,9 @@ export const removeTopic = topic => {
 export const toggleExpand = entryId => {
   return { type: 'TOGGLE_EXPAND', entryId };
 };
+export const toggleSidebar = () => {
+  return { type: 'TOGGLE_SIDEBAR' };
+};
 
 /*
  * THUNKS
@@ -45,14 +48,33 @@ const fetchUm = (route, data = null) => {
     cache: 'default'
   };
   if(data) {
-    reqOpts['body'] = data;
+    reqOpts['body'] = JSON.stringify(data);
   }
   let req = new Request(`http://${contentServer()}/${route}`, reqOpts);
   return fetch(req);
 };
 
-export const fetchPageCount = () => (dispatch, getState) => {
-  fetchUm('count').then(res => {
+export const changePage = (page = 1) => (dispatch, getState) => {
+  dispatch(selectPage(page));
+  dispatch(fetchEntries());
+};
+export const addTopicThunk = topic => (dispatch, getState) => {
+  dispatch(addTopic(topic));
+  dispatch(fetchPageCount());
+  dispatch(fetchEntries());
+};
+export const removeTopicThunk = topic => (dispatch, getState) => {
+  dispatch(removeTopic(topic));
+  dispatch(fetchPageCount());
+  dispatch(fetchEntries());
+};
+
+export const fetchPageCount = (page = 1) => (dispatch, getState) => {
+  let data = {
+    topicIds: R.compose(R.map(t => t.id), R.values)(getState().curTopics),
+    search: getState().search
+  };
+  fetchUm('count', data).then(res => {
     return res.json();
   }).then(json => {
     // console.log(`fetchPageCount count: ${json.count}`);
@@ -61,7 +83,7 @@ export const fetchPageCount = () => (dispatch, getState) => {
       pages--;
     }
     dispatch(setPages(pages)); 
-    dispatch(changePage(1));
+    dispatch(changePage(page));
   }).catch(err => {
     console.log(`fetch count err: ${err}`);
     throw err;
@@ -72,8 +94,7 @@ export const fetchTopics = (init = false) => (dispatch, getState) => {
   fetchUm('topics').then(res => {
     return res.json();
   }).then(json => {
-    // console.log(`fetched ${json.topics.length} topics`);
-    dispatch(setTopics(json.topics));
+    dispatch(setTopics(R.sort((a, b) => b.count - a.count, json.topics)));
     if(init) {
       dispatch(tfChange(''));
     }
@@ -84,10 +105,13 @@ export const fetchTopics = (init = false) => (dispatch, getState) => {
 
 export const fetchEntries = () => (dispatch, getState) => {
   let page = currentPage(getState().pages);
+  // console.log(`pages: ${JSON.stringify(getState().pages)}`);
+  // console.log(`fetchEntries page: ${page}`);
   let data = {
     topicIds: R.compose(R.map(t => t.id), R.values)(getState().curTopics),
     search: getState().search
   };
+  console.log(`fetchEntries data: ${JSON.stringify(data)}`);
   fetchUm(`entry/${page}`, data).then(res => {
     return res.json();
   }).then(json => {

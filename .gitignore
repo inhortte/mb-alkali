@@ -9,3 +9,4 @@ dist
 *~
 thurk/server/**
 redis-data/**
+npm-debug.log

@@ -52,7 +52,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
   };
   let date = new Intl.DateTimeFormat('en-GB', dateOpts).format(new Date(entry.created_at));
   return (
-    <div className="col-md-8 col-md-push-2" style={entryStyle}>
+    <div className="col-md-8 col-md-push-2 entry" style={entryStyle}>
       <div className="row">
 	<div className="col-md-12" style={subjectStyle}>
 	  {entry.subject}
@@ -65,7 +65,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
 	<div className="col-md-4">
 	  <div style={dateStyle}>{date}</div>
 	  <div style={expandCollapseStyle}>
-	    <a href="#" onClick={toggleExpand}>
+	    <a href="#" onClick={() => toggleExpand(entry._id)}>
 	      {expanded ? 'contract' : 'expand'}
 	    </a>
 	  </div>

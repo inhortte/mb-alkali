@@ -1,10 +1,12 @@
 import R from 'ramda';
 import { connect } from 'react-redux';
 import TopicPane from '../components/TopicPane';
-import { tfChange, sChange, fetchEntries } from '../actions';
+import { toggleSidebar, tfChange, sChange, fetchPageCount, fetchEntries } from '../actions';
+import { sbToggle } from '../external/sidebar';
 
 const mapStateToProps = state => {
   return {
+    sbOpen: state.sbOpen,
     filteredTopics: state.filteredTopics,
     curTopics: state.curTopics
   };
@@ -15,10 +17,15 @@ const mapDispatchToProps = dispatch => {
     searchChange: e => dispatch(sChange(e.target.value)),
     searchSubmit: e => {
       if(e && e.key === 'Enter') {
+	dispatch(fetchPageCount());
 	dispatch(fetchEntries());
       }
     },
-    topicFilterChange: e => dispatch(tfChange(e.target.value))
+    topicFilterChange: e => dispatch(tfChange(e.target.value)),
+    closeSidebar: () => {
+      sbToggle();
+      dispatch(toggleSidebar());
+    }
   };
 };
 

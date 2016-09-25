@@ -2,8 +2,12 @@ body {
     font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
 }
 
+#martenblog-sidebar {
+    font-size: 14px;
+}
+
 a {
-    color: #1e90ff;
+    color: #1e9090;
 }
 
 #entries {

@@ -9,6 +9,7 @@ const Entries = ({ entries, expandedEntryIds }) => {
     let expanded = expandedEntryIds.includes(e._id);
     return <VEntry key={e._id} entry={e} expanded={expanded} />;
   }, entries);
+  let style = { overflow: 'scroll' };
   return (
     <div id="entries">
       {entryViews}

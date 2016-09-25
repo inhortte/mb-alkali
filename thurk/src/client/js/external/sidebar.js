@@ -1,7 +1,7 @@
 'use strict';
 
 import { sidebar } from 'bootstrap-layout';
-import { sidebarId, layoutContainerId, layoutContainerSidebarClass } from '../config';
+import { sidebarId, layoutContainerId, layoutContainerSidebarClass, entriesId } from '../config';
 import $ from 'jquery';
 
 export const sbInit = () => {
@@ -9,7 +9,6 @@ export const sbInit = () => {
 };
 
 export const sbToggle = () => {
-  console.log(`toggling`);
   if($(`#${layoutContainerId}`).hasClass(layoutContainerSidebarClass)) {
     $(`#${layoutContainerId}`).removeClass(layoutContainerSidebarClass);
   } else {
@@ -17,3 +16,9 @@ export const sbToggle = () => {
   }
   sidebar.toggle(`#${sidebarId}`);
 };
+
+export const sbHide = () => {
+  $(`#${layoutContainerId}`).removeClass(layoutContainerSidebarClass);
+  sidebar.hide(`#${sidebarId}`);
+};
+

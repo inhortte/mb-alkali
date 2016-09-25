@@ -1,7 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { removeTopic } from '../actions';
+import { removeTopicThunk } from '../actions';
 import CurTopics from '../components/CurTopics';
 
 const mapStateToProps = state => {
@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    removeTopic: topic => dispatch(removeTopic(topic))
+    removeTopic: topic => dispatch(removeTopicThunk(topic))
   };
 };
 
