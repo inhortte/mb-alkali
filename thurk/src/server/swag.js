@@ -14,16 +14,17 @@ const mkFindOpts = (topicIds = null, searchText = null) => {
     return {};
   } else {
     let topicOpts, searchOpts;
-    if(topicIds) {
+    if(topicIds && topicIds.length > 0) {
       let orArr =  R.map(id => {
 	return { topic_ids: { $elemMatch: { $eq: id }}};
       }, topicIds);
       topicOpts = { $or: orArr };
     }
-    if(searchText) {
-      searchOpts = { $or: [{ subject: { $regex: searchText, $options: 'i' }}, { entry: { $regex: searchText, $options: 'i' }}]};
+    if(searchText && searchText.trim().length > 0) {
+      searchOpts = { $or: [{ subject: { $regex: searchText.trim(), $options: 'i' }},
+			   { entry: { $regex: searchText.trim(), $options: 'i' }}]};
     }
-    if(topicIds && searchText) {
+    if(topicOpts && searchOpts) {
       return { $and: [ topicOpts, searchOpts ] };
     } else {
       return topicOpts || searchOpts;
@@ -63,22 +64,6 @@ export const getTopics = () => new Promise((resolve) => {
   });
 });
 
-export const getEntries = (page = 1, topicIds = null) => new Promise((resolve) => {
-  let db;
-  let findOpts = mkFindOpts(topicIds);
-  mongoConnect().then(_db => {
-    db = _db;
-    let coll = db.collection('entry');
-    return coll.find(findOpts).skip((page - 1)* entriesPerPage).limit(entriesPerPage).toArray();
-  }).then(entries => {
-    db.close(true);
-    resolve(entries);
-  }).catch(err => {
-    console.log(`err: ${err}`);
-    resolve({ err: err });
-  });
-});
-
 export const getEntriesByDate = ({ y, m, d }) => new Promise((resolve) => {
   let db;
   let beginTime = new Date(y, m - 1, d).getTime();
@@ -96,21 +81,23 @@ export const getEntriesByDate = ({ y, m, d }) => new Promise((resolve) => {
   });
 });
 
-export const getEntriesBySearch = (text, page = 1, topicIds = null) => new Promise((resolve) => {
+export const getEntries = (page = 1, topicIds = null, search = null) => new Promise((resolve) => {
   let db;
-  let findOpts = mkFindOpts(topicIds, text);  
+  let findOpts = mkFindOpts(topicIds, search);
   mongoConnect().then(_db => {
     db = _db;
     let coll = db.collection('entry');
     return coll.find(findOpts)
-      .skip((page - 1) * entriesPerPage)
+      .sort({ created_at: -1 })
+      .skip((page - 1)* entriesPerPage)
       .limit(entriesPerPage)
       .toArray();
   }).then(entries => {
-    db.close();
+    db.close(true);
     resolve(entries);
   }).catch(err => {
     console.log(`err: ${err}`);
     resolve({ err: err });
   });
 });
+

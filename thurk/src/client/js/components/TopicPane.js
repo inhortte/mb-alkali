@@ -10,14 +10,14 @@ const searchPlaceholders = [
   'I snorted your dung', 'Stapleguns aloft', 'Excoriate the woman'
 ];
 
-const TopicPane = ({ filteredTopics, curTopics, topicFilterChange }) => {
+const TopicPane = ({ filteredTopics, curTopics, searchChange, searchSubmit, topicFilterChange }) => {
   let fTopicsViewDivStyle = { marginTop: 5 };
   let fTopicsView = R.map(t => <VTopic topic={t} key={t.topic} />, filteredTopics);
   return (
     <div className="container-fluid">
       <div className="sidebar-block sidebar-brand-border sidebar-p-y form-group">
 	<h3>Search</h3>
-	<input className="form-control" type="text" placeholder={searchPlaceholders[Math.floor(Math.random() * searchPlaceholders.length)]} />
+	<input className="form-control" type="text" placeholder={searchPlaceholders[Math.floor(Math.random() * searchPlaceholders.length)]} onChange={searchChange} onKeyPress={searchSubmit} />
       </div>
       <div className="sidebar-block sidebar-brand-border sidebar-p-y form-group">
 	<h3>Topics</h3>

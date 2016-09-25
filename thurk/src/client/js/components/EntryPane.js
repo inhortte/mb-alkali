@@ -2,6 +2,7 @@
 
 import R from 'ramda';
 import React from 'react';
+import VEntries from '../containers/VEntries';
 
 const PageLis = (pages, currentPage) => {
   let mapIndexed = R.addIndex(R.map);
@@ -53,7 +54,10 @@ const HeadWithinTheThorax = ({ pages, currentPage, hasPrevPageLink, hasNextPageL
 
 const EntryPane = ({ pages, currentPage, hasPrevPageLink, hasNextPageLink, changePage, sbToggle }) => {
   return (
-    <HeadWithinTheThorax pages={pages} currentPage={currentPage} hasPrevPageLink={hasPrevPageLink} hasNextPageLink={hasNextPageLink} changePage={changePage} sbToggle={sbToggle} />
+    <div className="col-md-12">
+      <HeadWithinTheThorax pages={pages} currentPage={currentPage} hasPrevPageLink={hasPrevPageLink} hasNextPageLink={hasNextPageLink} changePage={changePage} sbToggle={sbToggle} />
+      <VEntries />
+    </div>
   );
 };
 

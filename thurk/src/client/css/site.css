@@ -1,0 +1,28 @@
+body {
+    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+}
+
+a {
+    color: #1e90ff;
+}
+
+#entries {
+    font-size: 16px;
+    padding-left: 15px;
+    line-height: 20px;
+}
+
+.entry img {
+    width: 100%;
+}
+
+.entry blockquote {
+    font-size: smaller;
+}
+
+img {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+

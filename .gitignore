@@ -1,6 +1,7 @@
 thurk/node_modules/**
 thurk/public/js/**
 thurk/public/css/**
+thurk/public/images/blog/**
 *.rdb
 dist
 .tmp

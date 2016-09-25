@@ -1,6 +1,8 @@
 'use strict';
 
+import R from 'ramda';
 import React from 'react';
+import { hashHistory, Router, Route, IndexRoute } from 'react-router';
 import thunk from 'redux-thunk';
 import { render } from 'react-dom';
 import { Provider, connect } from 'react-redux';
@@ -9,7 +11,7 @@ import VTopicPane from './containers/VTopicPane';
 import VEntryPane from './containers/VEntryPane';
 import { sbInit } from './external/sidebar';
 import { mbApp } from './reducers';
-import { fetchPageCount, fetchTopics } from './actions';
+import { fetchPageCount, fetchTopics, fetchEntries } from './actions';
 import { sbToggle } from './external/sidebar';
 
 const bodyColors = [
@@ -59,11 +61,14 @@ class Martenblog extends React.Component {
     sbInit();
     this.props.dispatch(fetchPageCount());
     this.props.dispatch(fetchTopics(true));
+    this.props.dispatch(fetchEntries());
   }
   render() {
+    let { page, y, m, d } = this.props;
+    console.log(`page: ${page} y: ${y} m: ${m} d: ${d}`);
     return(
       <div id="martenblog-layout-container" className="layout-container ls-top">
-	<div id="martenblog-content" className="layout-content" data-scrollable>
+	<div id="martenblog-content" className="layout-content">
 	  <div className="container-fluid">
 	    <Head />
 	    <Thorax />
@@ -78,14 +83,23 @@ class Martenblog extends React.Component {
   };
 }
 const VMartenblog = connect(
-  
+  (_, ownProps) => {
+    let { page, y, m, d } = ownProps.params;
+    return { page, y, m, d };
+  }
 )(Martenblog);
 
 const store = createStore(mbApp, applyMiddleware(thunk));
 
 render(
   <Provider store={store}>
-    <VMartenblog />
+    <Router history={hashHistory}>
+      <Route path="/" component={VMartenblog}>
+	<IndexRoute component={VMartenblog} />
+	<Route path="/:page" component={VMartenblog} />
+	<Route path="/:y/:m/:d" component={VMartenblog} />
+      </Route>
+    </Router>
   </Provider>,
   document.getElementById('martenblog')
 );

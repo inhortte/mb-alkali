@@ -94,26 +94,11 @@ server.register(Nes, err => {
     path: '/entry/{page?}',
     handler: (req, reply) => {
       let topicIds = (req.payload && req.payload.topicIds) || null;
-      getEntries(req.params.page || 1, topicIds).then(entries => {
-	reply({ entry: entries[0] });
+      let search = (req.payload && req.payload.search) || null;
+      console.log(`payload: ${JSON.stringify(req.payload)}`);
+      getEntries(req.params.page || 1, topicIds, search).then(entries => {
+	reply({ entries: entries });
       });
-    }
-  });
-  server.route({
-    method: 'POST',
-    path: '/search/{page?}',
-    handler: (req, reply) => {
-      let topicIds = (req.payload && req.payload.topicIds) || null;      
-      if(req.payload && req.payload.search) {
-	console.log(`payload: ${JSON.stringify(req.payload)}`);
-	getEntriesBySearch(req.payload.search, req.params.page || 1, topicIds).then(entries => {
-	  reply({ entry: entries[0] });
-	});
-      } else {
-	getEntries().then(entries => {
-	  reply({ entry: entries[0] });
-	});
-      }
     }
   });
 });
