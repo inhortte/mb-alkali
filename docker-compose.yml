@@ -10,7 +10,10 @@ services:
     ports:
       - "3033:3033"
     depends_on:
+      - nginx-proxy
       - minkmongo
+    environment:
+      - VIRTUAL_HOST=blog.thinklikeamink.net,blog.thinklikeamink.org
   minkmongo:
     image: minkmongo
     container_name: minkmongo
@@ -18,3 +21,16 @@ services:
       - /var/lib/mongodb:/data/db
     ports:
       - "27017:27017"
+  nginx-proxy:
+    image: nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DEFAULT_HOST=thinklikeamink.net,thinklikeamink.org
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/nginx/sites-available:/opt/nginx-proxy/sites-static
+      - /usr/share/nginx/html:/usr/share/nginx/html
+      - /etc/nginx/certs:/etc/nginx/certs
