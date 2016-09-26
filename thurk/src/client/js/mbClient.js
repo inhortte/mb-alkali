@@ -10,7 +10,7 @@ import { createStore, applyMiddleware } from 'redux';
 import VTopicPane from './containers/VTopicPane';
 import VEntryPane from './containers/VEntryPane';
 import { mbApp } from './reducers';
-import { toggleSidebar, showSidebar, fetchPageCount, fetchTopics, fetchEntries } from './actions';
+import { toggleSidebar, showSidebar, hideSidebar, fetchPageCount, fetchTopics, fetchEntries } from './actions';
 import { sbInit, sbHide, sbShow, sbToggle, setScrollable } from './external/sidebar';
 import { entriesId, sidebarId } from './config';
 
@@ -88,8 +88,13 @@ class Martenblog extends React.Component {
     this.props.dispatch(fetchPageCount(parseInt(page)));
     this.props.dispatch(fetchTopics(true));
     setTimeout(() => {
+      dispatch(hideSidebar());
       sbHide();
     }, 500);
+    setTimeout(() => {
+      disptach(hideSidebar());
+      sbHide();
+    }, 2000);    
   }
   render() {
     let { page, y, m, d } = this.props;
