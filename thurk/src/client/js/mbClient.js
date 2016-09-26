@@ -82,17 +82,18 @@ const Abdomen = () => (
 
 class Martenblog extends React.Component {
   componentDidMount() {
+    let { dispatch } = this.props;
     document.body.style.background = bodyColors[Math.floor(Math.random() * bodyColors.length)];
     sbInit();
     let page = this.props.page || 1;
-    this.props.dispatch(fetchPageCount(parseInt(page)));
-    this.props.dispatch(fetchTopics(true));
+    dispatch(fetchPageCount(parseInt(page)));
+    dispatch(fetchTopics(true));
     setTimeout(() => {
       dispatch(hideSidebar());
       sbHide();
     }, 500);
     setTimeout(() => {
-      disptach(hideSidebar());
+      dispatch(hideSidebar());
       sbHide();
     }, 2000);    
   }
