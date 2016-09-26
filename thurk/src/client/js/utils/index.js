@@ -36,3 +36,14 @@ export const currentPage = (pagesArr) => {
   let page = R.find(R.propEq('selected', true))(pagesArr);
   return (page && page.pNum) || 1;
 };
+
+
+export const getFormattedDate = (timestamp, dateOpts) => {
+  let _date = new Date(timestamp);
+  let dateLink = `/${_date.getFullYear()}/${_date.getMonth() + 1}/${_date.getDate()}`;
+  let dateString = new Intl.DateTimeFormat('en-GB', dateOpts).format(_date);
+  return {
+    dateLink: dateLink,
+    dateString: dateString
+  };
+};

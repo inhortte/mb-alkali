@@ -1,13 +1,10 @@
-'use strict';
-
+import R from 'ramda';
 import { connect } from 'react-redux';
-import { removeTopic } from '../actions';
-import Entries from '../components/Entries';
+import DateHead from '../components/DateHead';
 
 const mapStateToProps = state => {
   return {
-    entries: state.entries,
-    expandedEntryIds: state.expandedEntryIds,
+    curDate: state.entries && state.entries[0] && state.entries[0].created_at,
     prevDate: state.prevDate,
     nextDate: state.nextDate
   };
@@ -19,9 +16,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const VEntries = connect(
+const VDateHead = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Entries);
+)(DateHead);
 
-export default VEntries;
+export default VDateHead;

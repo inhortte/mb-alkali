@@ -54,6 +54,8 @@ const initialState = {
   sbOpen: false,
   pages: mkPages(15),
   entries: [],
+  prevDate: null,
+  nextDate: null,
   expandedEntryIds: [],
   topics: [],
   filteredTopics: [],
@@ -88,6 +90,8 @@ export const mbApp = (state = initialState, action) => {
     return Object.assign({}, state, { sbOpen: true });
   case 'HIDE_SIDEBAR':
     return Object.assign({}, state, { sbOpen: false });
+  case 'SET_SURROUNDING_DATES':
+    return Object.assign({}, state, { prevDate: action.prevDate, nextDate: action.nextDate });
   default:
     return state;
   };

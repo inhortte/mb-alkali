@@ -103,3 +103,29 @@ export const getEntries = (page = 1, topicIds = null, search = null) => new Prom
   });
 });
 
+export const getAlrededores = timestamp => new Promise((resolve) => {
+  let db;
+  let date = new Date(parseInt(timestamp));
+  let dayBegins = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+  let dayEnds = dayBegins + 1000 * 3600 * 24 - 1;
+  let prevDate, nextDate;
+  mongoConnect().then(_db => {
+    db = _db;
+    let coll = db.collection('entry');
+    return coll.find({ created_at: { $lt: dayBegins }}).sort({ created_at: -1 }).limit(1).toArray();
+  }).then(entries => {
+    if(entries && entries[0]) {
+      prevDate = entries[0].created_at;
+    }
+    let coll = db.collection('entry');
+    return coll.find({ created_at: { $gt: dayEnds }}).sort({ created_at: 1 }).limit(1).toArray();
+  }).then(entries => {
+    if(entries && entries[0]) {
+      nextDate = entries[0].created_at;
+    }
+    resolve({ prevDate: prevDate, nextDate: nextDate });
+  }).catch(err => {
+    console.log(`err: ${err}`);
+    resolve({ err: err });
+  });
+});

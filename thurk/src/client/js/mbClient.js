@@ -2,7 +2,10 @@
 
 import R from 'ramda';
 import React from 'react';
-import { hashHistory, Router, Route, IndexRoute } from 'react-router';
+import Route from 'react-router/lib/Route';
+import Router from 'react-router/lib/Router';
+import hashHistory from 'react-router/lib/hashHistory';
+import IndexRoute from 'react-router/lib/IndexRoute';
 import thunk from 'redux-thunk';
 import { render } from 'react-dom';
 import { Provider, connect } from 'react-redux';

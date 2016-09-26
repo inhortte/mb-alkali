@@ -7,14 +7,8 @@ import { changePage } from '../actions';
 import { sbToggle } from '../external/sidebar';
 
 const mapStateToProps = (state, ownProps) => {
-  let pages = analPageNumbers(state.pages);
-  let cp = currentPage(state.pages);
   let { y, m, d } = ownProps;
   return {
-    pages: pages,
-    currentPage: cp,
-    hasPrevPageLink: cp > 1,
-    hasNextPageLink: cp < state.pages.length,
     y: y,
     m: m,
     d: d
@@ -22,15 +16,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    changePage: pNum => dispatch(changePage(pNum)),
-    sbToggle: () => sbToggle()
-  };
 };
 
 const VEntryPane = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(EntryPane);
 
 export default VEntryPane;

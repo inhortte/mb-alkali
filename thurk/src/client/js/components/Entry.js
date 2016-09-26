@@ -3,6 +3,9 @@
 import R from 'ramda';
 import marked from 'marked';
 import React from 'react';
+import Link from 'react-router/lib/Link';
+import { dateTimeOpts } from '../config';
+import { getFormattedDate } from '../utils';
 
 const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
   let entryStyle = {
@@ -11,7 +14,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
     backgroundColor: '#b0c4de',
     'WebkitBorderRadius': 10,
     'MozBorderRadius': 10,
-    'borderRadius' :10
+    'borderRadius': 10
   };
   let subjectStyle = {
     fontSize: 'larger',
@@ -32,7 +35,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
   let topicViews = R.compose(R.map(t => {
     return (
       <span key={t.id}>
-	<span className="glyphicon glyphicon-arrow-right"></span>
+	<span className="glyphicon glyphicon-grain"></span>
 	{' '}
 	<a href="#" onClick={() => addTopic(t)}>{t.topic}</a>
 	{' '}
@@ -42,22 +45,12 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
   let entryHtml = {
     __html: expanded ? marked(entry.entry) : `${entry.entry.slice(0, 200)}...`
   };
-  let dateOpts = {
-    weekday: 'short',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  };
-  let _date = new Date(entry.created_at);
-  let dateLink = `#/${_date.getFullYear()}/${_date.getMonth() + 1}/${_date.getDate()}`;
-  let date = new Intl.DateTimeFormat('en-GB', dateOpts).format(_date);
+  let { dateLink, dateString } = getFormattedDate(entry.created_at, dateTimeOpts);
   return (
     <div className="col-md-8 col-md-push-2 entry" style={entryStyle}>
       <div className="row">
 	<div className="col-md-12" style={subjectStyle}>
-	  <a href={dateLink}>{entry.subject}</a>
+	  <Link to={dateLink}>{entry.subject}</Link>
 	</div>
       </div>
       <div className="row">
@@ -65,7 +58,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
 	  Topics: {topicViews}
 	</div>
 	<div className="col-md-4">
-	  <div style={dateStyle}>{date}</div>
+	  <div style={dateStyle}>{dateString}</div>
 	  <div style={expandCollapseStyle}>
 	    <a href="#" onClick={e => { e.preventDefault(); toggleExpand(entry._id);}}>
 	      {expanded ? 'contract' : 'expand'}

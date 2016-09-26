@@ -40,6 +40,9 @@ export const showSidebar = () => {
 export const hideSidebar = () => {
   return { type: 'HIDE_SIDEBAR' };
 };
+export const setSurroundingDates = ({ prevDate, nextDate }) => {
+  return { type: 'SET_SURROUNDING_DATES', prevDate: prevDate, nextDate: nextDate };
+};
 
 /*
  * THUNKS
@@ -134,11 +137,23 @@ export const fetchEntries = () => (dispatch, getState) => {
 
 export const fetchDateEntry = (y, m, d) => (dispatch, getState) => {
   fetchUm(`entry/${y}/${m}/${d}`).then(res => {
-    return res.json()
+    return res.json();
   }).then(json => {
     dispatch(setEntries(json.entries));
   }).catch(err => {
     console.log(`fetch date entry err: ${err}`);
+    throw err;
+  });
+};
+
+export const fetchSurroundingDates = timestamp => (dispatch, getState) => {
+  fetchUm(`alrededores/${timestamp}`).then(res => {
+    return res.json();
+  }).then(json => {
+    // console.log(`fetchSurroundingDates: ${JSON.stringify(json)}`);
+    dispatch(setSurroundingDates(json.alrededores));
+  }).catch(err => {
+    console.log(`fetch surrounding dates err: ${err}`);
     throw err;
   });
 };

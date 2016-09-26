@@ -6,7 +6,7 @@ import Hapi from 'hapi';
 import Nes from 'nes';
 import Good from 'good';
 import Inert from 'inert';
-import { getPageCount, getTopics, getEntries, getEntriesBySearch, getEntriesByDate } from './swag';
+import { getPageCount, getTopics, getEntries, getEntriesByDate, getAlrededores } from './swag';
 
 /*
  * Web / API server
@@ -76,6 +76,17 @@ server.register(Nes, err => {
 	    count: t.entry_ids.length
 	  };
 	}, topics)});
+      });
+    }
+  });
+  server.route({
+    method: 'POST',
+    path: '/alrededores/{timestamp}',
+    handler: (req, reply) => {
+      getAlrededores(req.params.timestamp).then(timestamps => {
+	reply({
+	  alrededores: timestamps
+	});
       });
     }
   });
