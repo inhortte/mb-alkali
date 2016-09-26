@@ -10,8 +10,8 @@ import { createStore, applyMiddleware } from 'redux';
 import VTopicPane from './containers/VTopicPane';
 import VEntryPane from './containers/VEntryPane';
 import { mbApp } from './reducers';
-import { toggleSidebar, fetchPageCount, fetchTopics, fetchEntries } from './actions';
-import { sbInit, sbHide, sbToggle, setScrollable } from './external/sidebar';
+import { toggleSidebar, showSidebar, fetchPageCount, fetchTopics, fetchEntries } from './actions';
+import { sbInit, sbHide, sbShow, sbToggle, setScrollable } from './external/sidebar';
 import { entriesId, sidebarId } from './config';
 
 const bodyColors = [
@@ -47,8 +47,8 @@ const VHead = connect(
   dispatch => {
     return {
       openSidebar: () => {
-	sbToggle();
-	dispatch(toggleSidebar());
+	sbShow();
+	dispatch(showSidebar());
       }
     };
   }
@@ -94,6 +94,7 @@ class Martenblog extends React.Component {
   render() {
     let { page, y, m, d } = this.props;
     let sidebarStyle = { overflow: 'hidden' };
+    let sidebarContaitnerStyle = { backgroundColor: 'rgba(192, 192, 192, 0.5)' };
     return(
       <div id="martenblog-layout-container" className="layout-container">
 	<div id="martenblog-content" className="layout-content">
@@ -103,8 +104,10 @@ class Martenblog extends React.Component {
 	    <Abdomen />
 	  </div>
 	</div>
-	<div id="martenblog-sidebar" className="sidebar sidebar-right sidebar-visible-md-up sidebar-size-20c" data-position="right" style={sidebarStyle}>
-	  <VTopicPane />
+	<div id="martenblog-sidebar" className="sidebar sidebar-right sidebar-size-20c" data-position="right" style={sidebarStyle}>
+	  <div className="container-fluid" style={sidebarContaitnerStyle}>
+	    <VTopicPane />
+	  </div>
 	</div>
       </div>
     );

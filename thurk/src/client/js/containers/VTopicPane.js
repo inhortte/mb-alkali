@@ -1,8 +1,8 @@
 import R from 'ramda';
 import { connect } from 'react-redux';
 import TopicPane from '../components/TopicPane';
-import { toggleSidebar, tfChange, sChange, fetchPageCount, fetchEntries } from '../actions';
-import { sbToggle } from '../external/sidebar';
+import { hideSidebar, toggleSidebar, tfChange, sChange, fetchPageCount, fetchEntries } from '../actions';
+import { sbHide, sbToggle } from '../external/sidebar';
 
 const mapStateToProps = state => {
   return {
@@ -23,8 +23,8 @@ const mapDispatchToProps = dispatch => {
     },
     topicFilterChange: e => dispatch(tfChange(e.target.value)),
     closeSidebar: () => {
-      sbToggle();
-      dispatch(toggleSidebar());
+      sbHide();
+      dispatch(hideSidebar());
     }
   };
 };

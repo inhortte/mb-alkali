@@ -21,4 +21,10 @@ export const sbHide = () => {
   $(`#${layoutContainerId}`).removeClass(layoutContainerSidebarClass);
   sidebar.hide(`#${sidebarId}`);
 };
+export const sbShow = () => {
+  if(!$(`#${layoutContainerId}`).hasClass(layoutContainerSidebarClass)) {
+    $(`#${layoutContainerId}`).addClass(layoutContainerSidebarClass);
+  }
+  sidebar.show(`#${sidebarId}`);
+};
 

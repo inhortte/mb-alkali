@@ -84,6 +84,10 @@ export const mbApp = (state = initialState, action) => {
     return Object.assign({}, state, { expandedEntryIds: toggleExpand(action.entryId, state.expandedEntryIds) });
   case 'TOGGLE_SIDEBAR':
     return Object.assign({}, state, { sbOpen: !state.sbOpen });
+  case 'SHOW_SIDEBAR':
+    return Object.assign({}, state, { sbOpen: true });
+  case 'HIDE_SIDEBAR':
+    return Object.assign({}, state, { sbOpen: false });
   default:
     return state;
   };
