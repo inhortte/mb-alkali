@@ -5,12 +5,8 @@ import { removeTopic } from '../actions';
 import DateEntry from '../components/DateEntry';
 
 const mapStateToProps = (state, ownProps) => {
-  let { y, m, d } = ownProps;
   return {
-    entries: state.entries,
-    y: y,
-    m: m,
-    d: d
+    entries: state.entries
   };
 };
 

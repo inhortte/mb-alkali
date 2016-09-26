@@ -11,6 +11,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "bootstrap-layout": "^1.0.0-alpha.10",
+    "enumify": "^1.0.4",
     "good": "^7.0.2",
     "good-console": "^6.1.2",
     "gulp": "github:gulpjs/gulp#4.0",

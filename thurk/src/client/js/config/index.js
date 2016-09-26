@@ -1,5 +1,7 @@
 'use strict';
 
+import { Enum } from 'enumify';
+
 export const contentServer = () => {
   let url = document.URL;
   if(url.match(/thinklikeamink/)) {
@@ -31,3 +33,6 @@ export const dateOpts = {
   month: 'short',
   day: 'numeric'
 };
+
+export class EFormats extends Enum {}
+EFormats.initEnum(['BY_PAGE', 'BY_DATE']);

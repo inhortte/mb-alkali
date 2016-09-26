@@ -7,7 +7,7 @@ import Link from 'react-router/lib/Link';
 import { dateTimeOpts } from '../config';
 import { getFormattedDate } from '../utils';
 
-const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
+const Entry = ({ entry, topics, expanded, addTopic, toggleExpand, goToDate }) => {
   let entryStyle = {
     margin: '0 0 5px 0',
     paddingTop: 5,
@@ -20,7 +20,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
     fontSize: 'larger',
     fontWeight: 'bold',
     textAlign: 'left',
-    paddingBottom: 5
+    paddingBottom: 5 
   };
   let dateStyle = {
     fontSize: 'smaller',
@@ -45,12 +45,12 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand }) => {
   let entryHtml = {
     __html: expanded ? marked(entry.entry) : `${entry.entry.slice(0, 200)}...`
   };
-  let { dateLink, dateString } = getFormattedDate(entry.created_at, dateTimeOpts);
+  let { dateLink, dateString, y, m, d } = getFormattedDate(entry.created_at, dateTimeOpts);
   return (
     <div className="col-md-8 col-md-push-2 entry" style={entryStyle}>
       <div className="row">
 	<div className="col-md-12" style={subjectStyle}>
-	  <Link to={dateLink}>{entry.subject}</Link>
+	  <Link to={dateLink} onClick={() => goToDate(y, m, d)}>{entry.subject}</Link>
 	</div>
       </div>
       <div className="row">

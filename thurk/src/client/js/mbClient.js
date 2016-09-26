@@ -13,9 +13,9 @@ import { createStore, applyMiddleware } from 'redux';
 import VTopicPane from './containers/VTopicPane';
 import VEntryPane from './containers/VEntryPane';
 import { mbApp } from './reducers';
-import { toggleSidebar, showSidebar, hideSidebar, fetchPageCount, fetchTopics, fetchEntries } from './actions';
+import { setEFormat, toggleSidebar, showSidebar, hideSidebar, fetchPageCount, fetchTopics, fetchEntries, fetchDateEntry } from './actions';
 import { sbInit, sbHide, sbShow, sbToggle, setScrollable } from './external/sidebar';
-import { entriesId, sidebarId } from './config';
+import { entriesId, sidebarId, EFormats } from './config';
 
 const bodyColors = [
   '#8b8b83', '#696969', '#cd5c5c', '#8fbc8f', '#66cdaa', '#008b8b', '#483d8b', '#cd5555', '#838b83', '#6e7b8b', '#8b7b8b'
@@ -60,16 +60,13 @@ const VHead = connect(
 const Thorax = ({ y, m, d }) => {
   return (
     <div className="col-md-12">
-      <VEntryPane y={y} m={m} d={d} />
+      <VEntryPane />
     </div>
   );
 };
 const VThorax = connect(
   (_, ownProps) => {
     return {
-      y: ownProps.y,
-      m: ownProps.m,
-      d: ownProps.d
     };
   }
 )(Thorax);
@@ -85,11 +82,18 @@ const Abdomen = () => (
 
 class Martenblog extends React.Component {
   componentDidMount() {
-    let { dispatch } = this.props;
+    let { dispatch, page, y, m, d } = this.props;
     document.body.style.background = bodyColors[Math.floor(Math.random() * bodyColors.length)];
     sbInit();
-    let page = this.props.page || 1;
-    dispatch(fetchPageCount(parseInt(page)));
+    if(y && m && d) {
+      dispatch(setEFormat(EFormats.BY_DATE));
+      setTimeout(() => dispatch(fetchDateEntry(y, m, d)), 1000);
+    } else {
+      dispatch(setEFormat(EFormats.BY_PAGE));
+      let curPage = page || 1;
+      dispatch(fetchPageCount(parseInt(curPage)));
+      // setTimeout(() => dispatch(fetchEntries()), 1000);
+    }
     dispatch(fetchTopics(true));
     setTimeout(() => {
       dispatch(hideSidebar());
@@ -109,7 +113,7 @@ class Martenblog extends React.Component {
 	<div id="martenblog-content" className="layout-content">
 	  <div className="container-fluid">
 	    <VHead />
-	    <VThorax y={y} m={m} d={d}/>
+	    <VThorax />
 	    <Abdomen />
 	  </div>
 	</div>
@@ -128,7 +132,6 @@ const VMartenblog = connect(
     return { page, y, m, d };
   },
   (dispatch, ownProps) => {
-    let { page, y, m, d } = ownProps.params;
     return {
       dispatch: dispatch
     };

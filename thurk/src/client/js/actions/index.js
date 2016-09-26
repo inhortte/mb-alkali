@@ -1,7 +1,7 @@
 'use strict';
 
 import R from 'ramda';
-import { contentServer, entriesPerPage } from '../config';
+import { contentServer, entriesPerPage, EFormats } from '../config';
 import { currentPage } from '../utils';
 
 export const selectPage = pNum => {
@@ -43,6 +43,9 @@ export const hideSidebar = () => {
 export const setSurroundingDates = ({ prevDate, nextDate }) => {
   return { type: 'SET_SURROUNDING_DATES', prevDate: prevDate, nextDate: nextDate };
 };
+export const setEFormat = eFormat => {
+  return { type: 'SET_E_FORMAT', eFormat };
+};
 
 /*
  * THUNKS
@@ -69,15 +72,18 @@ const fetchUm = (route, data = null) => {
 
 export const changePage = (page = 1) => (dispatch, getState) => {
   dispatch(selectPage(page));
+  dispatch(setEFormat(EFormats.BY_PAGE));
   dispatch(fetchEntries());
 };
 export const addTopicThunk = topic => (dispatch, getState) => {
   dispatch(addTopic(topic));
+  dispatch(setEFormat(EFormats.BY_PAGE));  
   dispatch(fetchPageCount());
   dispatch(fetchEntries());
 };
 export const removeTopicThunk = topic => (dispatch, getState) => {
   dispatch(removeTopic(topic));
+  dispatch(setEFormat(EFormats.BY_PAGE));  
   dispatch(fetchPageCount());
   dispatch(fetchEntries());
 };
@@ -139,6 +145,7 @@ export const fetchDateEntry = (y, m, d) => (dispatch, getState) => {
   fetchUm(`entry/${y}/${m}/${d}`).then(res => {
     return res.json();
   }).then(json => {
+    console.log(`fetchDateEntries - entries.length: ${json.entries.length}`);
     dispatch(setEntries(json.entries));
   }).catch(err => {
     console.log(`fetch date entry err: ${err}`);

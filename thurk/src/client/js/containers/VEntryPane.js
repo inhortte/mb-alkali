@@ -7,11 +7,8 @@ import { changePage } from '../actions';
 import { sbToggle } from '../external/sidebar';
 
 const mapStateToProps = (state, ownProps) => {
-  let { y, m, d } = ownProps;
   return {
-    y: y,
-    m: m,
-    d: d
+    eFormat: state.eFormat
   };
 };
 

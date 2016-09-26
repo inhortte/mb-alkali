@@ -1,7 +1,7 @@
 'use strict';
 
 import R from 'ramda';
-import { maxPageNumbersToDisplay } from '../config';
+import { maxPageNumbersToDisplay, EFormats } from '../config';
 
 const selectPage = (pNum, pages) => {
   return R.map(p => {
@@ -51,6 +51,7 @@ const toggleExpand = (entryId, expandedEntryIds) => {
 };
 
 const initialState = {
+  eFormat: EFormats.BY_PAGE,
   sbOpen: false,
   pages: mkPages(15),
   entries: [],
@@ -92,6 +93,8 @@ export const mbApp = (state = initialState, action) => {
     return Object.assign({}, state, { sbOpen: false });
   case 'SET_SURROUNDING_DATES':
     return Object.assign({}, state, { prevDate: action.prevDate, nextDate: action.nextDate });
+  case 'SET_E_FORMAT':
+    return Object.assign({}, state, { eFormat: action.eFormat });
   default:
     return state;
   };

@@ -12,18 +12,18 @@ class DateHead extends React.Component {
     setTimeout(() => this.props.dispatch(fetchSurroundingDates(this.props.curDate)), 2000);
   }
   render() {
-    let { curDate, prevDate, nextDate } = this.props;
+    let { curDate, prevDate, nextDate, changePage, goToDate } = this.props;
     let dateString, prevDateLink, nextDateLink;
     if(curDate) {
       dateString = getFormattedDate(curDate, dateOpts).dateString;
     }
     if(prevDate) {
-      let { dateLink, dateString } = getFormattedDate(prevDate, dateOpts);
-      prevDateLink = <span><span className="glyphicon glyphicon-chevron-left"></span><Link to={dateLink}>{dateString}</Link></span>;
+      let { dateLink, dateString, y, m, d } = getFormattedDate(prevDate, dateOpts);
+      prevDateLink = <span><span className="glyphicon glyphicon-chevron-left"></span><Link to={dateLink} onClick={() => goToDate(prevDate, y, m, d)}>{dateString}</Link></span>;
        }
     if(nextDate) {
-      let { dateLink, dateString } = getFormattedDate(nextDate, dateOpts);
-      nextDateLink = <span><Link to={dateLink}>{dateString}</Link><span className="glyphicon glyphicon-chevron-right"></span></span>;
+      let { dateLink, dateString, y, m, d } = getFormattedDate(nextDate, dateOpts);
+      nextDateLink = <span><Link to={dateLink} onClick={() => goToDate(nextDate, y, m, d)}>{dateString}</Link><span className="glyphicon glyphicon-chevron-right"></span></span>;
     }
     let communalStyle = {
       backgroundColor: '#b0c4de',
@@ -40,7 +40,7 @@ class DateHead extends React.Component {
       <div>
 	<div className="row">
 	  <div className="col-md-4 col-md-offset-4" style={styleCurDate}>
-	    <Link to={'/1'}><span className="glyphicon glyphicon-arrow-up"></span></Link>
+	    <Link to={'/1'} onClick={() => changePage(1)}><span className="glyphicon glyphicon-arrow-up"></span></Link>
 	  </div>
 	</div>
 	<div className="row" style={communalStyle}>

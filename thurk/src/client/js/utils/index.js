@@ -44,6 +44,9 @@ export const getFormattedDate = (timestamp, dateOpts) => {
   let dateString = new Intl.DateTimeFormat('en-GB', dateOpts).format(_date);
   return {
     dateLink: dateLink,
-    dateString: dateString
+    dateString: dateString,
+    y: _date.getFullYear(),
+    m: _date.getMonth() + 1,
+    d: _date.getDate()
   };
 };

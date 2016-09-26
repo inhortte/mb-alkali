@@ -7,8 +7,9 @@ import { fetchDateEntry } from '../actions';
 
 class DateEntry extends React.Component {
   componentDidMount() {
-    let { dispatch, y, m, d } = this.props;
-    setTimeout(() => dispatch(fetchDateEntry(y, m, d)), 1000);
+    // let { dispatch, y, m, d } = this.props;
+    // console.log(`DateEntry - componentDidMount - fetching date entry ${y}/${m}/${d}`);
+    // setTimeout(() => dispatch(fetchDateEntry(y, m, d)), 1000);
   }
   render() {
     let { entries } = this.props;

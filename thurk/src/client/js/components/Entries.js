@@ -23,7 +23,7 @@ class Entries extends React.Component {
     }, entries);
     let style = { overflow: 'scroll' };
     return (
-	<div id="entries">
+      <div id="entries">
 	{entryViews}
       </div>
     );
