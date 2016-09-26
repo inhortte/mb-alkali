@@ -8,6 +8,8 @@ const babel = require('gulp-babel');
 const mocha = require('gulp-mocha');
 const browserify = require('gulp-browserify');
 const del = require('del');
+const uglify = require('gulp-uglify');
+const streamify = require('gulp-streamify');
 const wrap = require('gulp-wrap');
 
 const path = require('path');
@@ -68,7 +70,19 @@ const browserify2 = () => {
     .pipe(wrap('(function (){ var define = undefined; <%=contents%> })()'))
     .pipe(gulp.dest(path.join(paths.clientDest, 'js/bundle')));
 };
+const browserify3 = () => {
+  return gulp.src(path.join(paths.clientDest, 'js/mbClient.js'))
+    .pipe(browserify({
+      global: true,
+      transform: ['uglifyify']
+    }))
+    .pipe(streamify(uglify()))
+    .pipe(wrap('(function (){ var define = undefined; <%=contents%> })();'))
+    .pipe(gulp.dest(path.join(paths.clientDest, 'js/bundle')));
+};
+
 const buildClient = gulp.series(cleanClient, gulp.parallel(babelify, css), browserify2);
+const buildClientProd = gulp.series(cleanClient, gulp.parallel(babelify, css), browserify3);
 const cwatch = () => {
   gulp.watch([paths.clientSrc, paths.cssSrc], buildClient);
 };
@@ -113,6 +127,7 @@ gulp.task('swatch', swatch);
 
 gulp.task('cclean', cleanClient);
 gulp.task('buildClient', buildClient);
+gulp.task('buildClientProd', buildClientProd);
 gulp.task('cwatch', cwatch);
 
 gulp.task('default', swatch);

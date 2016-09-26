@@ -40,6 +40,10 @@ export const toggleSidebar = () => {
  */
 
 const fetchUm = (route, data = null) => {
+  let protocol = 'http';
+  if(document.URL.match(/thinklikeamink/)) {
+    protocol = 'https';
+  }
   let headers = new Headers();
   headers.append("Content-Type", "application/json");
   let reqOpts = {
@@ -50,7 +54,7 @@ const fetchUm = (route, data = null) => {
   if(data) {
     reqOpts['body'] = JSON.stringify(data);
   }
-  let req = new Request(`http://${contentServer()}/${route}`, reqOpts);
+  let req = new Request(`${protocol}://${contentServer()}/${route}`, reqOpts);
   return fetch(req);
 };
 

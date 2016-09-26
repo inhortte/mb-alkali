@@ -3,18 +3,29 @@ body, html {
     overflow: visible;
 }
 
-#martenblog-sidebar {
-    font-size: 14px;
+@media all and (max-width 991px) {
+    #martenblog-sidebar {
+	font-size: 12px;
+    }
+    #entries {
+	font-size: 14px;
+	padding-left: 15px;
+	line-height: 18px;
+    }
+}
+@media all and (min-width 992px) {
+    #martenblog-sidebar {
+	font-size: 14px;
+    }
+    #entries {
+	font-size: 16px;
+	padding-left: 15px;
+	line-height: 20px;
+    }
 }
 
 a {
     color: #1e9090;
-}
-
-#entries {
-    font-size: 16px;
-    padding-left: 15px;
-    line-height: 20px;
 }
 
 .entry img {
