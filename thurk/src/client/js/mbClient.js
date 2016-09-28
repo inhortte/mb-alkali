@@ -75,7 +75,14 @@ const Abdomen = () => (
   <div className="col-md-12">
     <hr />
     <p className="well well-sm">
-      Along with martens, goulish goats and the rippling fen.
+      <span>
+        Along with martens, goulish goats and the rippling fen - these writings
+        and any accompanying multimedia Copyright
+      </span>
+      {' '}
+      <span className="glyphicon glyphicon-copyright-mark"></span>
+      {' '}
+      <span>Bob Murry Shelton 2016.</span>
     </p>
   </div>
 );
