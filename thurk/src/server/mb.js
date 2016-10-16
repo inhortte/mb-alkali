@@ -7,6 +7,17 @@ import Nes from 'nes';
 import Good from 'good';
 import Inert from 'inert';
 import { getPageCount, getTopics, getEntries, getEntriesByDate, getAlrededores } from './swag';
+import { apolloHapi, graphiqlHapi } from 'apollo-server';
+import MartenSchema from './schema';
+
+/*
+ * Apollo (GraphQL) server hovno
+ */
+
+const apolloOptions = {
+  schema: MartenSchema,
+  debug: true
+};
 
 /*
  * Web / API server
@@ -32,6 +43,24 @@ server.register({
       }, {
         module: 'good-console'
       }, 'stdout']
+    }
+  }
+});
+
+/* Apollo */
+server.register({
+  register: apolloHapi,
+  options: {
+    path: '/gql',
+    apolloOptions: apolloOptions
+  }
+});
+server.register({
+  register: graphiqlHapi,
+  options: {
+    path: '/giql',
+    graphiqlOptions: {
+      endpointURL: '/gql'
     }
   }
 });
