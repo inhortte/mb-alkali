@@ -22,10 +22,7 @@ const paths = {
   clientSrc: 'src/client/**/*.js',
   clientDest: 'public',
   cssSrc: 'src/client/**/*.css',
-  cssDest: 'public/css',
-
-  giqlSrc: 'src/graphiql/**/*.js',
-  giqlDest: 'public/graphiql'
+  cssDest: 'public/css'
 };
 const babelPresets = [
   'react-es2015'
@@ -35,41 +32,6 @@ const babelPlugins = [
   'transform-object-assign',
   'array-includes'
 ];
-
-/*
- * graphiQL client
- */
-
-const cleanGiql = (cb) => {
-  del([path.join(paths.giqlDest, '**/*.js'),
-       '!' + path.join(paths.giqlDest, 'vendor/**')]).then(ps => {
-    console.log('Expunged:\n' + ps.join('\n'));
-    cb();
-  });
-};
-const babelifyGiql = () => {
-  return gulp.src(paths.giqlSrc)
-    .pipe(sourcemaps.init())
-    .pipe(babel({
-      presets: babelPresets,
-      plugins: babelPlugins
-    }))
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(paths.giqlDest));
-};
-const browserifyGiql = () => {
-  return gulp.src(path.join(paths.giqlDest, 'giql.js'))
-    .pipe(browserify({
-      "browserify-css": {
-        autoInject: true
-      },
-      insertGlobals: true,
-      debug: true
-    }))
-    .pipe(wrap('(function (){ var define = undefined; <%=contents%> })()'))
-    .pipe(gulp.dest(path.join(paths.giqlDest, 'bundle')));
-};
-const buildGiql = gulp.series(cleanGiql, gulp.parallel(babelifyGiql), browserifyGiql);
 
 /*
  * CLIENT
@@ -156,9 +118,6 @@ const swatch = () => {
 /*
  * TASKS
  */
-
-gulp.task('giql', buildGiql);
-gulp.task('gwatch', () => gulp.watch([paths.giqlSrc], buildGiql));
 
 gulp.task('sclean', cleanServer);
 gulp.task('server', server);

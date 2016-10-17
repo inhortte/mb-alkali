@@ -7,7 +7,7 @@ import Link from 'react-router/lib/Link';
 import { dateTimeOpts } from '../config';
 import { getFormattedDate } from '../utils';
 
-const Entry = ({ entry, topics, expanded, addTopic, toggleExpand, goToDate }) => {
+const Entry = ({ entry, topics, expanded, noContract, addTopic, toggleExpand, goToDate }) => {
   let entryStyle = {
     margin: '0 0 5px 0',
     paddingTop: 5,
@@ -34,7 +34,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand, goToDate }) =>
   };
   let topicViews = R.compose(R.map(t => {
     return (
-      <span key={t.id}>
+      <span key={t._id}>
 	<span className="glyphicon glyphicon-grain"></span>
 	{' '}
 	<a href="#" onClick={() => addTopic(t)}>{t.topic}</a>
@@ -45,7 +45,14 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand, goToDate }) =>
   let entryHtml = {
     __html: expanded ? marked(entry.entry) : `${entry.entry.slice(0, 200)}...`
   };
-  let { dateLink, dateString, y, m, d } = getFormattedDate(entry.created_at, dateTimeOpts);
+  let { dateLink, dateString, y, m, d } = getFormattedDate(entry.createdAt, dateTimeOpts);
+  let expandContract = noContract ? '' : (
+    <div style={expandCollapseStyle}>
+      <a href="#" onClick={e => { e.preventDefault(); toggleExpand(entry._id);}}>
+	{expanded ? 'contract' : 'expand'}
+      </a>
+    </div>
+  );
   return (
     <div className="col-md-8 col-md-push-2 entry" style={entryStyle}>
       <div className="row">
@@ -59,11 +66,7 @@ const Entry = ({ entry, topics, expanded, addTopic, toggleExpand, goToDate }) =>
 	</div>
 	<div className="col-md-4">
 	  <div style={dateStyle}>{dateString}</div>
-	  <div style={expandCollapseStyle}>
-	    <a href="#" onClick={e => { e.preventDefault(); toggleExpand(entry._id);}}>
-	      {expanded ? 'contract' : 'expand'}
-	    </a>
-	  </div>
+	  {expandContract}
 	</div>
       </div>
       <hr />

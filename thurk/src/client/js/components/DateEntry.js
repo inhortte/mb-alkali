@@ -6,15 +6,10 @@ import VEntry from '../containers/VEntry';
 import { fetchDateEntry } from '../actions';
 
 class DateEntry extends React.Component {
-  componentDidMount() {
-    // let { dispatch, y, m, d } = this.props;
-    // console.log(`DateEntry - componentDidMount - fetching date entry ${y}/${m}/${d}`);
-    // setTimeout(() => dispatch(fetchDateEntry(y, m, d)), 1000);
-  }
   render() {
     let { entries } = this.props;
     let entryViews = R.map(e => {
-      return <VEntry key={e._id} entry={e} expanded={true} />;
+      return <VEntry key={e._id} entry={e} expanded={true} noContract={true} />;
     }, entries);
     return (
       <div id="entries">

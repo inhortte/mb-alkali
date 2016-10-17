@@ -3,6 +3,8 @@
 import R from 'ramda';
 import { contentServer, entriesPerPage, EFormats } from '../config';
 import { currentPage } from '../utils';
+import apolloClient from '../external/apollo';
+import gql from 'graphql-tag';
 
 export const selectPage = pNum => {
   return { type: 'SELECT_PAGE', pNum };
@@ -90,77 +92,145 @@ export const removeTopicThunk = topic => (dispatch, getState) => {
 
 export const fetchPageCount = (page = 1) => (dispatch, getState) => {
   let data = {
-    topicIds: R.compose(R.map(t => t.id), R.values)(getState().curTopics),
+    topicIds: R.compose(R.map(t => t._id), R.values)(getState().curTopics),
     search: getState().search
   };
-  fetchUm('count', data).then(res => {
-    return res.json();
-  }).then(json => {
-    // console.log(`fetchPageCount count: ${json.count}`);
-    let pages = Math.floor(json.count / entriesPerPage) + 2;
-    if(json.count % entriesPerPage === 0) {
+  let query = gql`
+query pCount(
+  $search: String,
+  $topicIds: [Int]
+) {
+  pCount(
+    topicIds: $topicIds,
+    search: $search
+  )
+}`;
+
+  apolloClient.query({ query, variables: data }).then(aqr => {
+    let pages = Math.floor(aqr.data.pCount / entriesPerPage) + 2;
+    if(aqr.data.pCount % entriesPerPage === 0) {
       pages--;
     }
     dispatch(setPages(pages)); 
     dispatch(changePage(page));
   }).catch(err => {
-    console.log(`fetch count err: ${err}`);
+    console.log(`apollo error: ${err}`);
     throw err;
   });
 };
 
 export const fetchTopics = (init = false) => (dispatch, getState) => {
-  fetchUm('topics').then(res => {
-    return res.json();
-  }).then(json => {
-    dispatch(setTopics(R.sort((a, b) => b.count - a.count, json.topics)));
+  let query = gql`
+query allTopics {
+  topics {
+    _id,
+    topic,
+    count
+  }
+}`;
+  apolloClient.query({ query }).then(aqr => {
+    // console.log(`apollo data: ${JSON.stringify(aqr.data)}`);
+    dispatch(setTopics(R.sort((a, b) => b.count - a.count, aqr.data.topics)));
     if(init) {
       dispatch(tfChange(''));
     }
   }).catch(err => {
-    console.log(`fetch topics err: ${err}`);
+    console.log(`apollo error: ${err}`);
+    throw err;
   });
 };
 
 export const fetchEntries = () => (dispatch, getState) => {
   let page = currentPage(getState().pages);
-  // console.log(`pages: ${JSON.stringify(getState().pages)}`);
-  // console.log(`fetchEntries page: ${page}`);
   let data = {
-    topicIds: R.compose(R.map(t => t.id), R.values)(getState().curTopics),
+    page: page,
+    limit: entriesPerPage,
+    topicIds: R.compose(R.map(t => t._id), R.values)(getState().curTopics),
     search: getState().search
   };
-  console.log(`fetchEntries data: ${JSON.stringify(data)}`);
-  fetchUm(`entry/${page}`, data).then(res => {
-    return res.json();
-  }).then(json => {
-    dispatch(setEntries(json.entries));
+
+  let query = gql`
+query entries(
+  $page: Int,
+  $limit: Int,
+  $topicIds: [Int],
+  $search: String
+) {
+  entries(
+    page: $page,
+    limit: $limit,
+    topicIds: $topicIds,
+    search: $search
+  ) {
+    _id,
+    createdAt,
+    subject,
+    entry,
+    topics {
+      _id,
+     topic
+    }
+  }
+}`;
+
+  apolloClient.query({ query, variables: data }).then(aqr => {
+    dispatch(setEntries(aqr.data.entries));
   }).catch(err => {
-    console.log(`fetch entries err: ${err}`);
+    console.log(`apollo err: ${err}`);
     throw err;
   });
 };
 
 export const fetchDateEntry = (y, m, d) => (dispatch, getState) => {
-  fetchUm(`entry/${y}/${m}/${d}`).then(res => {
-    return res.json();
-  }).then(json => {
-    console.log(`fetchDateEntries - entries.length: ${json.entries.length}`);
-    dispatch(setEntries(json.entries));
+  let data = { y: parseInt(y), m: parseInt(m), d: parseInt(d) };
+  let query = gql`
+query entriesByDate(
+  $y: Int!,
+  $m: Int!,
+  $d: Int!
+) {
+  entriesByDate(
+    y: $y,
+    m: $m,
+    d: $d
+  ) {
+    _id,
+    createdAt,
+    subject,
+    entry,
+    topics {
+      _id,
+     topic
+    }
+  }
+}`;
+  
+  apolloClient.query({ query, variables: data }).then(aqr => {
+    dispatch(setEntries(aqr.data.entriesByDate));
   }).catch(err => {
-    console.log(`fetch date entry err: ${err}`);
+    console.log(`apollo err: ${err}`);
     throw err;
   });
 };
 
 export const fetchSurroundingDates = timestamp => (dispatch, getState) => {
-  fetchUm(`alrededores/${timestamp}`).then(res => {
-    return res.json();
-  }).then(json => {
-    // console.log(`fetchSurroundingDates: ${JSON.stringify(json)}`);
-    dispatch(setSurroundingDates(json.alrededores));
+  let data = { ts: timestamp };
+  let query = gql`
+query alrededores(
+  $ts: Float!
+) {
+  alrededores(
+    timestamp: $ts
+  ) {
+    prevDate,
+    nextDate
+  }
+}`;
+
+  apolloClient.query({ query, variables: data }).then(aqr => {
+    dispatch(setSurroundingDates(aqr.data.alrededores));
   }).catch(err => {
-    console.log(`fetch surrounding dates err: ${err}`);
+    console.log(`apollo err: ${err}`);
     throw err;
   });
 };

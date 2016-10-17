@@ -7,13 +7,11 @@ import { addTopicThunk, toggleExpand, fetchDateEntry, setEFormat } from '../acti
 import { EFormats } from '../config';
 
 const mapStateToProps = (state, ownProps) => {
-  let topics = R.filter(t => {
-    return ownProps.entry.topic_ids.includes(t.id);
-  }, state.topics);
   return {
     entry: ownProps.entry,
-    topics: topics,
-    expanded: ownProps.expanded
+    topics: ownProps.entry.topics,
+    expanded: ownProps.expanded,
+    noContract: ownProps.noContract 
   };
 };
 

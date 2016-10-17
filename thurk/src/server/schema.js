@@ -31,6 +31,7 @@ const Topic = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'A distillation of your dream'
     },
+    count: { type: GraphQLInt },
     entries: {
       type: new GraphQLList(Entry),
       description: 'A number of entries for a topic',
@@ -148,7 +149,7 @@ const Query = new GraphQLObjectType({
 
 const MartenSchema = new GraphQLSchema({
   query: Query,
-  types: [ Topic, Entry, User ]
+  types: [ Topic, Entry, User, Alrededores ]
 });
 
 export default MartenSchema;

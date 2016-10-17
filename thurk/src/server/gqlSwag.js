@@ -11,8 +11,11 @@ const mongoConnect = () => {
 
 const tuneEntries = entries => {
   return R.map(entry => {
-    let { created_at } = entry;
-    return R.merge(R.clone(entry), { createdAt: created_at });
+    let { created_at, topic_ids } = entry;
+    return R.merge(R.clone(entry), {
+      createdAt: created_at,
+      topicIds: topic_ids
+    });
   }, entries);
 };
 
@@ -136,7 +139,13 @@ export const topics = () => new Promise((resolve) => {
     return coll.find({}).sort({ topic: 1 }).toArray();
   }).then(topics => {
     db.close(true);
-    resolve(topics);
+    resolve(R.map(t => {
+      return {
+	_id: t._id,
+	topic: t.topic,
+	count: t.entry_ids.length
+      };
+    }, topics));
   }).catch(err => {
     console.log(`err: ${err}`);
     resolve({ err: err });

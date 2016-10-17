@@ -5,7 +5,7 @@ import { changePage, fetchDateEntry, fetchSurroundingDates } from '../actions';
 
 const mapStateToProps = state => {
   return {
-    curDate: state.entries && state.entries[0] && state.entries[0].created_at,
+    curDate: state.entries && state.entries[0] && state.entries[0].createdAt,
     prevDate: state.prevDate,
     nextDate: state.nextDate
   };

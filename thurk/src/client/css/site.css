@@ -1,5 +1,5 @@
 body, html {
-    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+    font-family: 'Vollkorn', Courier, serif, monospace;
     overflow: visible;
 }
 
@@ -18,9 +18,9 @@ body, html {
 	font-size: 14px;
     }
     #entries {
-	font-size: 16px;
+	font-size: 18px;
 	padding-left: 15px;
-	line-height: 20px;
+	line-height: 22px;
     }
 }
 
@@ -33,7 +33,7 @@ a {
 }
 
 .entry blockquote {
-    font-size: smaller;
+    /* font-size: smaller; */
 }
 
 img {
