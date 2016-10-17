@@ -5,9 +5,9 @@ import { Enum } from 'enumify';
 export const contentServer = () => {
   let url = document.URL;
   if(url.match(/thinklikeamink/)) {
-    return 'blog.thinklikeamink.net';
+    return 'https://blog.thinklikeamink.net';
   } else {
-    return 'localhost:3033';
+    return 'http://localhost:3033';
   }
 };
 

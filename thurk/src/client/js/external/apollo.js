@@ -1,8 +1,9 @@
 'use strict';
 
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import { contentServer } from '../config';
 
-const networkInterface = createNetworkInterface('http://localhost:3033/gql', {
+const networkInterface = createNetworkInterface(`${contentServer()}/gql`, {
   headers: {
     'Content-Type': "application/json"
   }
