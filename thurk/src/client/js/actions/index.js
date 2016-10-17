@@ -53,25 +53,6 @@ export const setEFormat = eFormat => {
  * THUNKS
  */
 
-const fetchUm = (route, data = null) => {
-  let protocol = 'http';
-  if(document.URL.match(/thinklikeamink/)) {
-    protocol = 'https';
-  }
-  let headers = new Headers();
-  headers.append("Content-Type", "application/json");
-  let reqOpts = {
-    method: 'POST',
-    headers: headers,
-    cache: 'default'
-  };
-  if(data) {
-    reqOpts['body'] = JSON.stringify(data);
-  }
-  let req = new Request(`${protocol}://${contentServer()}/${route}`, reqOpts);
-  return fetch(req);
-};
-
 export const changePage = (page = 1) => (dispatch, getState) => {
   dispatch(selectPage(page));
   dispatch(setEFormat(EFormats.BY_PAGE));
