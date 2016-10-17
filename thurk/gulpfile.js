@@ -58,7 +58,7 @@ const babelify= () => {
 const css = () => {
   return gulp.src(paths.cssSrc).pipe(gulp.dest(paths.cssDest));
 };
-const browserify2 = () => {
+const browserifyDev = () => {
   return gulp.src(path.join(paths.clientDest, 'js/mbClient.js'))
     .pipe(browserify({
       "browserify-css": {
@@ -70,7 +70,7 @@ const browserify2 = () => {
     .pipe(wrap('(function (){ var define = undefined; <%=contents%> })()'))
     .pipe(gulp.dest(path.join(paths.clientDest, 'js/bundle')));
 };
-const browserify3 = () => {
+const browserifyProd = () => {
   return gulp.src(path.join(paths.clientDest, 'js/mbClient.js'))
     .pipe(browserify({
       global: true,
@@ -81,10 +81,10 @@ const browserify3 = () => {
     .pipe(gulp.dest(path.join(paths.clientDest, 'js/bundle')));
 };
 
-const buildClient = gulp.series(cleanClient, gulp.parallel(babelify, css), browserify2);
-const buildClientProd = gulp.series(cleanClient, gulp.parallel(babelify, css), browserify3);
+const buildClientDev = gulp.series(cleanClient, gulp.parallel(babelify, css), browserifyDev);
+const buildClientProd = gulp.series(cleanClient, gulp.parallel(babelify, css), browserifyProd);
 const cwatch = () => {
-  gulp.watch([paths.clientSrc, paths.cssSrc], buildClient);
+  gulp.watch([paths.clientSrc, paths.cssSrc], buildClientDev);
 };
 
 /*
@@ -126,7 +126,7 @@ gulp.task('testServer', testServer);
 gulp.task('swatch', swatch);
 
 gulp.task('cclean', cleanClient);
-gulp.task('buildClient', buildClient);
+gulp.task('buildClient', buildClientDev);
 gulp.task('buildClientProd', buildClientProd);
 gulp.task('cwatch', cwatch);
 

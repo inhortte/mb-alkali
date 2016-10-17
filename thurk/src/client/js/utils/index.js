@@ -11,7 +11,9 @@ export const analPageNumbers = (pagesArr) => {
       break;
     }
   }
-  // console.log(`selected: ${selected}`);
+  if(pagesArr.length <= maxPageNumbersToDisplay) {
+    return pagesArr;
+  }
   let start, final;
   let startPad = 0, finalPad = 0;
   let median = Math.floor(maxPageNumbersToDisplay / 2);
@@ -27,7 +29,7 @@ export const analPageNumbers = (pagesArr) => {
   } else {
     final = parseInt(selected + median);
   }
-  // console.log(`start: ${start} startPad: ${startPad} end: ${final} endPad: ${finalPad}`);
+
   return pagesArr.slice(start - startPad, final + finalPad + 1);
 };
 
